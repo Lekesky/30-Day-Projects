@@ -1,3 +1,5 @@
+package com.leke;
+
 public class Main {
     public static void main(String[] args) {
         Cache<Integer> c = new Cache<>(5);
@@ -9,7 +11,8 @@ public class Main {
         c.put(1000);
 
         c.print();
-        // int removedValue = c.evict(30);
+
+        // int removedValue = c.remove(30);
         // System.out.println("Remved the value " + removedValue + " from the cache");
         // c.print();
     }
