@@ -1,15 +1,14 @@
 package com.leke;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.leke.DTO.Employee;
 
 public class DataPipeline {
     ArrayList<Employee> employeeList = new ArrayList<>();
+    private static final Scanner scanner = new Scanner(System.in);
 
     public DataPipeline(ArrayList<Employee> employeeList){
         this.employeeList = employeeList;
@@ -17,18 +16,19 @@ public class DataPipeline {
 
     private void prompt(){
         System.out.println("""
-                [1] Filter
-                [0] Quit
-                """);
+            [1] Filter
+            [0] Quit
+        """);
     }
 
+    //
     private void operation(int op){
         switch(op){
 
             //Quit
             case 0 -> {
                 System.out.println("Goodbye!");
-                return;
+                System.exit(0);
             }
 
             //Filter operation
@@ -43,7 +43,6 @@ public class DataPipeline {
     }
 
     private void filter(){
-        Scanner inputFilter = new Scanner(System.in);
         System.out.println("""
             What filter operation would you like to do?
 
@@ -55,36 +54,36 @@ public class DataPipeline {
             [6] Filter by salary
             [0] Go Back
         """);
-
-        int filterOp = inputFilter.nextInt();
+        
+        int filterOp = scanner.nextInt();
         switch (filterOp) {
-            case 0 -> {
-                return;
-            }
+            case 0 -> {}
             case 1 -> {
-                Scanner empInput = new Scanner(System.in);
                 System.out.println("Would you like ACTIVE or INACTIVE employees?");
-                String empAns = empInput.nextLine();
+                scanner.nextLine();
+                String empAns = scanner.nextLine();
+                
                 ArrayList<Employee> filteredEmployeesList = employeeFilter(empAns);
                 filteredEmployeesList.forEach((e) -> {
                     System.out.println(e + "\n" + "-------------------------------------------------");
                 });
-
+                
             }
-            case 2 -> {
 
+            case 2 -> {
+                
             }
             case 3 -> {
-
+                
             }
             case 4 -> {
-
+                
             }
             case 5 -> {
-
+                
             }
             case 6 -> {
-
+                
             }
             default -> {
                 System.out.println("Invalid operation, please try again...");
@@ -118,15 +117,10 @@ public class DataPipeline {
     }
 
     public void run(){
-        Scanner in = new Scanner(System.in);
         while(true){
             prompt();
-            int op = in.nextInt();
-            operation(op);
-            in.close();
+            int opNum = scanner.nextInt();
+            operation(opNum);
         }
-        
     }
-
-
 }
