@@ -1,0 +1,41 @@
+id,first_name,last_name,email,department,job_title,salary,hire_date,status,age
+1,Marcus,Thompson,m.thompson@acme.com,Engineering,Software Engineer,95000,2021-03-15,ACTIVE,29
+2,Priya,Nair,p.nair@acme.com,Engineering,Senior Software Engineer,132000,2019-07-22,ACTIVE,34
+3,Jordan,Ellis,j.ellis@acme.com,Marketing,Marketing Manager,88000,2020-11-01,ACTIVE,41
+4,Sandra,Kowalski,s.kowalski@acme.com,HR,HR Specialist,62000,2022-06-10,ACTIVE,27
+5,DeShawn,Williams,d.williams@acme.com,Engineering,Staff Engineer,175000,2017-01-30,ACTIVE,38
+6,Mei,Chen,m.chen@acme.com,Finance,Financial Analyst,79000,2021-09-14,ACTIVE,31
+7,Tobias,Gruber,t.gruber@acme.com,Engineering,Junior Software Engineer,72000,2023-05-08,ACTIVE,24
+8,Aaliyah,Foster,a.foster@acme.com,Sales,Account Executive,68000,2020-02-17,INACTIVE,33
+9,Rafael,Dominguez,r.dominguez@acme.com,Engineering,Software Engineer,98000,2020-08-03,ACTIVE,30
+10,Keiko,Yamamoto,k.yamamoto@acme.com,Product,Product Manager,115000,2018-12-20,ACTIVE,36
+11,Brendan,O'Sullivan,b.osullivan@acme.com,Legal,Legal Counsel,140000,2016-04-11,ACTIVE,45
+12,Fatima,Al-Hassan,f.alhassan@acme.com,Engineering,Software Engineer,101000,2022-01-25,ACTIVE,28
+13,Chloe,Bergmann,c.bergmann@acme.com,Marketing,Content Strategist,71000,2021-07-19,ACTIVE,26
+14,Kwame,Asante,k.asante@acme.com,Engineering,Senior Software Engineer,128000,2019-03-05,ACTIVE,35
+15,Ingrid,Sorensen,i.sorensen@acme.com,Finance,Finance Manager,105000,2017-10-28,ACTIVE,42
+16,Darius,Patel,d.patel@acme.com,Sales,Sales Director,155000,2015-06-14,ACTIVE,48
+17,Nora,Fitzpatrick,n.fitzpatrick@acme.com,HR,HR Manager,84000,2018-08-09,INACTIVE,39
+18,Elijah,Banks,e.banks@acme.com,Engineering,DevOps Engineer,118000,2020-05-22,ACTIVE,32
+19,Yuki,Tanaka,y.tanaka@acme.com,Product,UX Designer,87000,2021-11-30,ACTIVE,29
+20,Caleb,Morrison,c.morrison@acme.com,Engineering,Junior Software Engineer,69000,2023-08-14,ACTIVE,23
+21,Amara,Diallo,a.diallo@acme.com,Marketing,Marketing Analyst,64000,2022-10-03,ACTIVE,25
+22,Viktor,Petrov,v.petrov@acme.com,Engineering,Software Engineer,97000,2020-04-16,ACTIVE,31
+23,Simone,Laurent,s.laurent@acme.com,Finance,Financial Analyst,76000,2021-02-08,INACTIVE,30
+24,Owen,Harrington,o.harrington@acme.com,Legal,Paralegal,55000,2023-01-17,ACTIVE,22
+25,Bianca,Russo,b.russo@acme.com,Sales,Account Executive,72000,2019-09-25,ACTIVE,37
+26,Marcus,Lee,m.lee@acme.com,Engineering,Principal Engineer,198000,2014-03-03,ACTIVE,44
+27,Zara,Mohammed,z.mohammed@acme.com,HR,HR Coordinator,52000,2023-06-26,ACTIVE,23
+28,Connor,Walsh,c.walsh@acme.com,Engineering,Senior Software Engineer,135000,2018-05-31,ACTIVE,36
+29,Layla,Nguyen,l.nguyen@acme.com,Product,Product Manager,119000,2019-11-12,ACTIVE,34
+30,Theodore,Blackwell,t.blackwell@acme.com,Finance,CFO,240000,2012-07-07,ACTIVE,52
+31,Ananya,Krishnan,a.krishnan@acme.com,Engineering,Software Engineer,93000,2022-03-21,ACTIVE,27
+32,Miles,Carter,m.carter@acme.com,Sales,Sales Manager,110000,2017-08-15,INACTIVE,41
+33,Hana,Petersen,h.petersen@acme.com,Marketing,Brand Manager,92000,2019-06-04,ACTIVE,38
+34,Damien,Okafor,d.okafor@acme.com,Engineering,DevOps Engineer,122000,2020-09-29,ACTIVE,33
+35,Sofia,Reyes,s.reyes@acme.com,Product,UX Researcher,82000,2021-04-13,ACTIVE,28
+36,Nathan,Goldberg,n.goldberg@acme.com,Legal,General Counsel,185000,2013-11-18,ACTIVE,50
+37,Imani,Jackson,i.jackson@acme.com,Engineering,Software Engineer,99000,2021-08-07,ACTIVE,30
+38,Lucía,Fernández,l.fernandez@acme.com,Marketing,Digital Marketing Lead,85000,2020-01-20,ACTIVE,35
+39,Patrick,Brennan,p.brennan@acme.com,Engineering,Staff Engineer,168000,2016-02-09,ACTIVE,40
+40,Naomi,Osei,n.osei@acme.com,HR,HR Director,125000,2015-09-01,ACTIVE,46
