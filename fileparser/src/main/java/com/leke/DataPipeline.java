@@ -1,21 +1,27 @@
 package com.leke;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 import com.leke.DTO.Employee;
-import com.leke.DTO.Status;
+import com.leke.Operations.FilterOperation;
+import com.leke.Operations.GroupByOperation;
+import com.leke.Operations.TransformOperation;
 
 public class DataPipeline {
     ArrayList<Employee> employeeList = new ArrayList<>();
     private static final Scanner scanner = new Scanner(System.in);
+    GroupByOperation groupByOp;
+    TransformOperation transformOp;
+    FilterOperation filterOp;
 
     public DataPipeline(ArrayList<Employee> employeeList){
         this.employeeList = employeeList;
+        this.groupByOp = new GroupByOperation(this.employeeList);
+        this.transformOp = new TransformOperation(this.employeeList);
+        this.filterOp = new FilterOperation(this.employeeList);
     }
 
     private void prompt(){
@@ -23,11 +29,11 @@ public class DataPipeline {
             [1] Filter
             [2] Transform
             [3] Group By
+            [4] Create Full report
             [0] Quit
         """);
     }
 
-    //
     private void operation(int op){
         switch(op){
 
@@ -37,13 +43,18 @@ public class DataPipeline {
                 System.exit(0);
             }
             //Filter operation
-            case 1 -> { filter(); }
+            case 1 -> { filterOp.filterBy(false, 0); }
 
             //Transformation operation
-            case 2 -> { transform(); }
+            case 2 -> { transformOp.transform(false, 0); }
 
             //Group By operation
-            case 3 -> { groupBy(); }
+            case 3 -> { groupByOp.groupBy(false, 0); }
+
+            //Print Summary report
+            case 4 -> {
+                fullReport();
+            }
             
             default -> {
                 System.out.println("Invalid operation, please try again...");
@@ -51,235 +62,44 @@ public class DataPipeline {
         }
     }
 
-    private void filter(){
-        System.out.println("""
-            What filter operation would you like to do?
+    private void fullReport(){
+        System.out.println("\n=== Headcount by Department ===\n");
+        @SuppressWarnings("unchecked")
+        Map<String, Long> departmentHeadCount = (Map<String, Long>) groupByOp.groupBy(true, 3);
+        departmentHeadCount.forEach((department, count) ->
+            System.out.printf("%-20s %5d%n", department, count)
+        );
 
-            [1] Filter by employee status
-            [2] Filter by department
-            [3] Filter by age
-            [4] Filter by hire date
-            [5] Filter by job title
-            [6] Filter by salary
-            [0] Go Back
-        """);
+        System.out.println("\n=== Average Salary by Department ===\n");
+        @SuppressWarnings("unchecked")
+        Map<String, Double> averageSalaryPerDep = (Map<String, Double>) groupByOp.groupBy(true, 4);
+        averageSalaryPerDep.forEach((department, avgSalary) ->
+             System.out.printf("%-20s %10s%n", department, "$" + String.format("%,.0f", avgSalary))
+        );
+
+        System.out.println("\n=== Top Earner per Department ===\n");
+        @SuppressWarnings("unchecked")
+        Map<String, Optional<Employee>> topEarnersPerDep = (Map<String, Optional<Employee>>) groupByOp.groupBy(true, 6);
+        topEarnersPerDep.forEach((department, emp) ->
+            System.out.printf("%-20s %-25s %10s%n", department, emp.get().getFirstName() + " " + emp.get().getLastName(), "$" + String.format("%,d", emp.get().getSalary()))
+        );
         
-        int filterOp = scanner.nextInt();
-        switch (filterOp) {
-            case 0 -> {}
-            case 1 -> {
-                System.out.println("Would you like ACTIVE or INACTIVE employees?");
-                scanner.nextLine();
-                String empAns = scanner.nextLine();
-                employeeStatusFilter(empAns).forEach((e) -> {
-                    System.out.println(e + "\n" + "-------------------------------------------------");
-                });
-                
-            }
 
-            case 2 -> {
-                System.out.println("Specify the department you would like to filter by?");
-                scanner.nextLine();
-                String empAns = scanner.nextLine();
-                employeeDepartmentFilter(empAns).forEach((e) -> {
-                    System.out.println(e + "\n" + "-------------------------------------------------");
-                });
-            }
-            case 3 -> {
-                System.out.println("Specify what age you would like to filter by?");
-                scanner.nextLine();
-                String empAns = scanner.nextLine();
-                employeeAgeFilter(empAns).forEach((e) -> {
-                    System.out.println(e + "\n" + "-------------------------------------------------");
-                });
-            }
-            case 4 -> {
-                System.out.println("Specify start date (yyyy-mm-dd) range you would like to filter by?");
-                scanner.nextLine();
-                String startDateAns = scanner.nextLine();
-                System.out.println("Specify end date (yyyy-mm-dd) range you would like to filter by?");
-                String endDateAns = scanner.nextLine();
-                employeeHireDateFilter(startDateAns, endDateAns).forEach((e) -> {
-                    System.out.println(e + "\n" + "-------------------------------------------------");
-                });
-            }
-            case 5 -> {
-                System.out.println("Specify the job title you would like to filter by?");
-                scanner.nextLine();
-                String empAns = scanner.nextLine();
-                employeeJobTitleFilter(empAns).forEach((e) -> {
-                    System.out.println(e + "\n" + "-------------------------------------------------");
-                });
-            }
-            case 6 -> {
-                System.out.println("Specify min salary range you would like to filter by?");
-                scanner.nextLine();
-                int minAns = scanner.nextInt();
-                System.out.println("Specify max salary range you would like to filter by?");
-                int maxAns = scanner.nextInt();
-                employeeSalaryFilter(minAns, maxAns).forEach((e) -> {
-                    System.out.println(e + "\n" + "-------------------------------------------------");
-                });
-            }
-            default -> {
-                System.out.println("Invalid operation, please try again...");
-            }
-        }
+        System.out.println("\n=== Employees Hired Before 2020 ===\n");
+        @SuppressWarnings("unchecked")
+        ArrayList<Employee> hiredBefore2020 = (ArrayList<Employee>) filterOp.filterBy(true, 4, "1999-01-01", "2020-12-31");
+        hiredBefore2020.forEach((e) ->
+            System.out.printf("%-5d %-15s %-15s %-30s %s%n", e.getId(), e.getFirstName(), e.getLastName(), e.getJobTitle(), e.getHireDate())
+        );
+
+        System.out.println("\n=== Total Payroll ===\n");
+        int totalPayroll = (int)groupByOp.groupBy(true, 5);
+        System.out.printf("%s%n", "$" + String.format("%,d", totalPayroll));
+
+        System.out.println();
     }
 
     
-
-    private ArrayList<Employee> employeeStatusFilter(String filter){
-        ArrayList<Employee> filteredEmployees = new ArrayList<>();
-        switch(filter.toUpperCase()){
-            case "INACTIVE" -> {
-                filteredEmployees = this.employeeList.stream()
-                .filter(
-                    (e) -> e.getStatus().toString().equals("INACTIVE")
-                )
-                .collect(Collectors.toCollection(ArrayList::new));
-                
-            }
-            case "ACTIVE" -> {
-                filteredEmployees = this.employeeList.stream()
-                .filter(
-                    (e) -> e.getStatus().toString().equals("ACTIVE")
-                )
-                .collect(Collectors.toCollection(ArrayList::new));
-            }
-            default -> {
-
-            }
-        }
-        return filteredEmployees;
-    }
-
-    private ArrayList<Employee> employeeDepartmentFilter(String filter){
-        return this.employeeList.stream()
-            .filter((e) -> e.getDepartment().toUpperCase().equals(filter.toUpperCase()))
-            .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private ArrayList<Employee> employeeAgeFilter(String filter){
-        return this.employeeList.stream()
-            .filter((e) -> e.getAge() == (Integer.parseInt(filter)))
-            .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private ArrayList<Employee> employeeHireDateFilter(String startDate, String endDate){
-        return this.employeeList.stream()
-            .filter((e) ->  !e.getHireDate().isBefore(LocalDate.parse(startDate)) && !e.getHireDate().isAfter(LocalDate.parse(endDate)))
-            .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private ArrayList<Employee> employeeJobTitleFilter(String filter){
-        return this.employeeList.stream()
-            .filter((e) -> e.getJobTitle().toUpperCase().equals(filter.toUpperCase()))
-            .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private ArrayList<Employee> employeeSalaryFilter(int min, int max){
-        return this.employeeList.stream()
-            .filter((e) -> e.getSalary() > min && e.getSalary() < max)
-            .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private void transform(){
-        System.out.println("""
-            What transformation operation would you like to do?
-
-            [1] Extract names
-            [2] Extract emails
-            [3] Extract salaries
-            [0] Go Back
-        """);
-        int transformOp = scanner.nextInt();
-        switch (transformOp) {
-            case 0 -> {}
-            case 1 -> {
-                System.out.println("-------------List of Employee names-------------");
-                employeeNameExtractor().forEach((e) -> {
-                    System.out.println(e + "\n" + "-------------------------------------------------");
-                });
-            }
-            case 2 -> {
-                System.out.println("-------------List of Employee names-------------");
-                employeeEmailExtractor().forEach((e) -> {
-                    System.out.println(e + "\n" + "-------------------------------------------------");
-                });
-            }
-
-            case 3 -> {
-                System.out.println("-------------List of Employee names-------------");
-                employeeSalaryExtractor().forEach((e) -> {
-                    System.out.println("$" + e + "\n" + "-------------------------------------------------");
-                });
-            }
-
-        }
-    }
-
-    private ArrayList<String> employeeNameExtractor(){
-        return this.employeeList
-            .stream()
-            .map((e) -> e.getFirstName() + " " + e.getLastName())
-            .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private ArrayList<String> employeeEmailExtractor(){
-        return this.employeeList
-            .stream()
-            .map(Employee::getEmail)
-            .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private ArrayList<Integer> employeeSalaryExtractor(){
-        return this.employeeList
-            .stream()
-            .map(Employee::getSalary)
-            .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private void groupBy(){
-         System.out.println("""
-            What group by operation would you like to do?
-
-            [1] Group by status
-            [2] Group by department
-            [0] Go Back
-        """);
-        int groupByOp = scanner.nextInt();
-        switch (groupByOp) {
-            case 0 -> {}
-            case 1 -> {
-                employeestatusGroupBy().forEach((k, v) -> {
-                    System.out.println("--------- " + k +" group ---------");
-                    v.forEach( e -> {
-                       System.out.println(e + "\n" + "-------------------------------------------------");
-                    });
-                });
-            }
-            case 2 -> {
-                employeeDepartmentGroupBy().forEach((k, v) -> {
-                    System.out.println("------------------------ " + k +" group ------------------------3");
-                    v.forEach( e -> {
-                       System.out.println(e + "\n" + "-------------------------------------------------");
-                    });
-                });
-            }
-
-        }
-    }
-
-    private Map<Status, List<Employee>> employeestatusGroupBy(){
-        return this.employeeList.stream().collect(Collectors.groupingBy((e) -> e.getStatus()));
-    }
-
-    private Map<String, List<Employee>> employeeDepartmentGroupBy(){
-        return this.employeeList.stream().collect(Collectors.groupingBy((e) -> e.getDepartment()));
-    }
-
-
 
     public void run(){
         while(true){

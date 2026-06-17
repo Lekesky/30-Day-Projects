@@ -12,10 +12,6 @@ public class Main {
         FileParser fp = new FileParser(file);
         ArrayList<Employee> employeeList = new ArrayList<>(fp.employeeList);
 
-        // employeeList.forEach((e) -> {
-        //     System.out.println(e + "\n" + "-------------------------------------------------");
-        // });
-
         DataPipeline dp = new DataPipeline(employeeList);
         dp.run();
     }
