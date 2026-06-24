@@ -1,12 +1,13 @@
 package com.leke.personal_finance_tracker.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.leke.personal_finance_tracker.model.User;
+import com.leke.personal_finance_tracker.model.Users;
 import com.leke.personal_finance_tracker.service.UserService;
 
 
@@ -16,7 +17,7 @@ import com.leke.personal_finance_tracker.service.UserService;
 
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService){
         this.userService = userService;
@@ -28,7 +29,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> signUp(@RequestBody User user) {
+    public ResponseEntity<?> signUp(@RequestBody Users user) {
         
         return ResponseEntity.ok(userService.signUp(user));
     }
